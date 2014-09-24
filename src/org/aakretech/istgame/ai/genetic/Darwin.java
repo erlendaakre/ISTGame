@@ -9,7 +9,6 @@ public class Darwin {
     private List<GeneticAI> population;
     private double totalFitness;
     private Random prng;
-
     private int popSize;
     private int elitism;
     private int goalScore;
@@ -20,11 +19,10 @@ public class Darwin {
     private double uniformityRate;
     private int crossOverOffspring;
 
-
     public Darwin(int popSize, int elitism, int goalScore, int numberOfGamesToPlay, int maxGenerations, double mutationRate,
-                  double uniformityRate, int crossOverOffspring) {
+            double uniformityRate, int crossOverOffspring) {
         prng = new Random();
-        population = new ArrayList<GeneticAI>(popSize);
+        population = new ArrayList<>(popSize);
 
         this.popSize = popSize;
         this.elitism = elitism;
@@ -37,7 +35,7 @@ public class Darwin {
     }
 
     public static void main(String[] main) {
-        Darwin darwin = new Darwin(100, 6, 500, 5, 50, 0.01D, 0.5D, 2);
+        Darwin darwin = new Darwin(100, 3, 500, 5, 1000, 0.015D, 0.5D, 2);
 
         darwin.initPopulation();
         darwin.evaluate();
@@ -210,5 +208,4 @@ public class Darwin {
         }
         System.out.println("Population initialized  : " + population.size());
     }
-
 }

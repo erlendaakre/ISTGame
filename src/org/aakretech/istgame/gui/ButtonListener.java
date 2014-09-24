@@ -1,8 +1,8 @@
 package org.aakretech.istgame.gui;
 
-import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.*;
 
 public class ButtonListener extends MouseAdapter {
 
@@ -12,8 +12,9 @@ public class ButtonListener extends MouseAdapter {
         this.gameWindow = gameWindow;
     }
 
+    @Override
     public void mousePressed(MouseEvent e) {
-        int guess = (Integer)((JLabel)e.getSource()).getClientProperty("guess");
+        int guess = (Integer) ((JLabel) e.getSource()).getClientProperty("guess");
         System.out.println("PLAYER " + gameWindow.getGame().getCurrentPlayer().getName() + " GUESSED " + guess);
         gameWindow.getGame().guess(guess);
         gameWindow.getBoardPanel().guessed();

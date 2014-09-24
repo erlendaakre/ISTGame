@@ -1,21 +1,22 @@
 package org.aakretech.istgame.gui;
 
+import java.awt.*;
+import javax.swing.*;
 import org.aakretech.istgame.logic.Player;
 
-import javax.swing.*;
-import java.awt.*;
-
-public class ControlPanel extends JPanel {
+/**
+ * The control panel at the top of the GUI, shows player score, remaining
+ * score for game, and has two coloured boxes used for making the guess.
+ * @author Erlend
+ */
+public final class ControlPanel extends JPanel {
 
     private GameWindow gameWindow;
-
     private int panelWidth;
     private int panelHeight;
-
     public static final Color COLOR_BACKGROUND = Color.DARK_GRAY;
     public static final Color COLOR_TEXT = Color.LIGHT_GRAY;
     public static final Color COLOR_TEXT_CURRENT_PLAYER = Color.RED;
-
     private JLabel p1Label;
     private JLabel p2Label;
     private JLabel p1LabelCurrentPlayer;
@@ -23,7 +24,6 @@ public class ControlPanel extends JPanel {
     private JLabel scoreLabel;
     private JLabel guessYellowButton;
     private JLabel guessBlueButton;
-
     private ButtonListener buttonListener;
 
     public ControlPanel(GameWindow gameWindow) {
@@ -102,11 +102,10 @@ public class ControlPanel extends JPanel {
     }
 
     public void setCurrentPlayer(Player player) {
-        if(player == gameWindow.getGame().getPlayers().get(0)) {
+        if (player == gameWindow.getGame().getPlayers().get(0)) {
             p1LabelCurrentPlayer.setVisible(true);
             p2LabelCurrentPlayer.setVisible(false);
-        }
-        else if(player == gameWindow.getGame().getPlayers().get(1)) {
+        } else if (player == gameWindow.getGame().getPlayers().get(1)) {
             p1LabelCurrentPlayer.setVisible(false);
             p2LabelCurrentPlayer.setVisible(true);
         }

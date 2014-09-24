@@ -1,17 +1,19 @@
 package org.aakretech.istgame.gui;
 
+import java.awt.*;
+import javax.swing.*;
 import org.aakretech.istgame.logic.Game;
 import org.aakretech.istgame.logic.Player;
 
-import javax.swing.*;
-import java.awt.*;
-
+/**
+ * The game window holding all the GUI components
+ * 
+ * @author Erlend Aakre
+ */
 public class GameWindow extends JFrame {
 
     private Game game;
-
     public static final GameFont GAMEFONT = new GameFont();
-
     private ControlPanel controlPanel;
     private BoardPanel gamePanel;
 
@@ -32,8 +34,8 @@ public class GameWindow extends JFrame {
     }
 
     public void checkWin() {
-        for(Player p : game.getPlayers()) {
-            if(p.getScore() >= game.getGoalScore()) {
+        for (Player p : game.getPlayers()) {
+            if (p.getScore() >= game.getGoalScore()) {
                 controlPanel.gameComplete();
                 remove(gamePanel);
                 add(new WinnerPanel(p, gamePanel.getWidth(), gamePanel.getHeight()));

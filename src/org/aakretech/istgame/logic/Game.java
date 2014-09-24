@@ -1,21 +1,19 @@
 package org.aakretech.istgame.logic;
 
-import org.aakretech.istgame.ai.SimpleAI;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import org.aakretech.istgame.ai.SimpleAI;
 
 public class Game {
+
     private int goalScore;
     private int favour;
     private int maxFavour;
     private int minFavour;
-
     private List<Integer> board;
     private List<Player> players;
     private int currentPlayerIndex;
-
     private int boardWidth;
     private int boardHeight;
     private Random prng;
@@ -38,7 +36,7 @@ public class Game {
     private ArrayList<Integer> generateBoard() {
 
         ArrayList<Integer> newBoard = new ArrayList<Integer>(this.boardHeight * this.boardWidth);
-        for(int i = 0; i < this.boardHeight * this.boardWidth; i++) {
+        for (int i = 0; i < this.boardHeight * this.boardWidth; i++) {
             newBoard.add(-1);
         }
         return newBoard;
@@ -48,14 +46,13 @@ public class Game {
         int score = getScore();
 
         // uncover entire board
-        for(int i = 0; i < board.size(); i++) {
+        for (int i = 0; i < board.size(); i++) {
             uncoverCell(i);
         }
 
-        if(countUncovered(guess) > board.size()/2) {
+        if (countUncovered(guess) > board.size() / 2) {
             getCurrentPlayer().addScore(score);
-        }
-        else {
+        } else {
             getCurrentPlayer().substractScore(score);
         }
 
@@ -66,32 +63,30 @@ public class Game {
         board = generateBoard();
         favour = prng.nextInt(maxFavour - minFavour) + minFavour;
 
-        if(currentPlayerIndex == -1) {
+        if (currentPlayerIndex == -1) {
             currentPlayerIndex = prng.nextInt(players.size());
-        }
-        else {
+        } else {
             /*if(!incrementPlayerIndex()) {
-               aiMove();
-            }  */
+             aiMove();
+             }  */
         }
 
-       /* if(! getCurrentPlayer().isHuman()) {
-            aiMove();
-        }  */
+        /* if(! getCurrentPlayer().isHuman()) {
+         aiMove();
+         }  */
     }
 
     public void aiMove() {
-        SimpleAI ai = (SimpleAI)getCurrentPlayer();
-        if(ai.getGame() == null) {
+        SimpleAI ai = (SimpleAI) getCurrentPlayer();
+        if (ai.getGame() == null) {
             ai.setGame(this);
         }
 
         int guess = ai.guess();
-        if(guess == -1) {
+        if (guess == -1) {
             uncoverCell(ai.flipTile());
             incrementPlayerIndex();
-        }
-        else {
+        } else {
             guess(guess);
         }
     }
@@ -103,18 +98,18 @@ public class Game {
     public double getPercentageUncovered() {
         int total = board.size();
         int uncovered = 0;
-        for(int i : board) {
-            if(i != -1) {
+        for (int i : board) {
+            if (i != -1) {
                 uncovered++;
             }
         }
-        return (100D/total)*uncovered;
+        return (100D / total) * uncovered;
     }
 
     public int countUncovered(int value) {
         int res = 0;
-        for(int i : board) {
-            if(i == value) {
+        for (int i : board) {
+            if (i == value) {
                 res++;
             }
         }
@@ -126,7 +121,7 @@ public class Game {
     }
 
     public int getScore() {
-        return 100 - (int)getPercentageUncovered();
+        return 100 - (int) getPercentageUncovered();
     }
 
     public int getBoardSize() {
@@ -137,24 +132,23 @@ public class Game {
         return board;
     }
 
-
     public Integer getCell(int cellIndex) {
         return board.get(cellIndex);
     }
 
     public void uncoverCell(int cellIndex) {
-            if(board.get(cellIndex) == -1) {
-                int cellValue = 0;
-                if(prng.nextInt(100) > favour) {
-                    cellValue = 1;
-                }
-                board.set(cellIndex, cellValue);
+        if (board.get(cellIndex) == -1) {
+            int cellValue = 0;
+            if (prng.nextInt(100) > favour) {
+                cellValue = 1;
             }
+            board.set(cellIndex, cellValue);
+        }
     }
 
     public boolean incrementPlayerIndex() {
         currentPlayerIndex++;
-        if(currentPlayerIndex >= players.size()) {
+        if (currentPlayerIndex >= players.size()) {
             currentPlayerIndex = 0;
         }
         return getCurrentPlayer().isHuman();
