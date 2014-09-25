@@ -7,6 +7,7 @@ import org.aakretech.istgame.logic.Player;
 /**
  * The control panel at the top of the GUI, shows player score, remaining
  * score for game, and has two coloured boxes used for making the guess.
+ *
  * @author Erlend
  */
 public final class ControlPanel extends JPanel {
@@ -24,8 +25,13 @@ public final class ControlPanel extends JPanel {
     private JLabel scoreLabel;
     private JLabel guessYellowButton;
     private JLabel guessBlueButton;
-    private ButtonListener buttonListener;
+    private GuessButtonListener buttonListener;
 
+    /**
+     * Creates the control panel
+     *
+     * @param gameWindow the main game window this panel is controlling
+     */
     public ControlPanel(GameWindow gameWindow) {
         super();
         this.gameWindow = gameWindow;
@@ -68,7 +74,7 @@ public final class ControlPanel extends JPanel {
         guessBlueButton.setBackground(BoardPanel.COLOR_0);
         guessBlueButton.setBounds(208, 2, 50, 50);
 
-        buttonListener = new ButtonListener(gameWindow);
+        buttonListener = new GuessButtonListener(gameWindow);
         guessYellowButton.addMouseListener(buttonListener);
         guessBlueButton.addMouseListener(buttonListener);
 
@@ -85,23 +91,36 @@ public final class ControlPanel extends JPanel {
         add(guessBlueButton);
         add(scoreLabel);
 
-        this.setCurrentPlayer(gameWindow.getGame().getCurrentPlayer());
+        this.setCurrentPlayerIndicator(gameWindow.getGame().getCurrentPlayer());
 
         this.setPreferredSize(new Dimension(panelWidth, panelHeight));
     }
 
+    /**
+     * Called when the game is over to stop further input
+     */
     public void gameComplete() {
         guessBlueButton.removeMouseListener(buttonListener);
         guessYellowButton.removeMouseListener(buttonListener);
     }
 
+    /**
+     * Updates ALL the controller text (player scores, and score left of this round of the game)
+     *
+     * @param newScore the new score remaining on this round
+     */
     public void updateText(int newScore) {
         p1Label.setText(gameWindow.getGame().getPlayers().get(0).getName() + ": " + gameWindow.getGame().getPlayers().get(0).getScore());
         p2Label.setText(gameWindow.getGame().getPlayers().get(1).getName() + ": " + gameWindow.getGame().getPlayers().get(1).getScore());
         scoreLabel.setText("" + newScore);
     }
 
-    public void setCurrentPlayer(Player player) {
+    /**
+     * Sets the current player indicator (shows which player is currently taking it's turn)
+     *
+     * @param player the player whose turn it currently is
+     */
+    public void setCurrentPlayerIndicator(Player player) {
         if (player == gameWindow.getGame().getPlayers().get(0)) {
             p1LabelCurrentPlayer.setVisible(true);
             p2LabelCurrentPlayer.setVisible(false);
@@ -111,8 +130,11 @@ public final class ControlPanel extends JPanel {
         }
     }
 
+    /**
+     * Calls when a guess was made, resets game score to 100
+     */
     public void guessed() {
         updateText(100);
-        setCurrentPlayer(gameWindow.getGame().getCurrentPlayer());
+        setCurrentPlayerIndicator(gameWindow.getGame().getCurrentPlayer());
     }
 }

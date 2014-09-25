@@ -36,6 +36,9 @@ public class GameWindow extends JFrame {
         animThread.start();
     }
 
+    /**
+     * Checks the game state to see if there is a winner, if so the winner panel is displayed
+     */
     public void checkWin() {
         for (Player p : game.getPlayers()) {
             if (p.getScore() >= game.getGoalScore()) {
@@ -46,14 +49,29 @@ public class GameWindow extends JFrame {
         }
     }
 
+    /**
+     * Gets the panel with the actual game board
+     *
+     * @return the board panel
+     */
     public BoardPanel getBoardPanel() {
         return gamePanel;
     }
 
+    /**
+     * Gets the panel with the game controls (score, guess buttons)
+     *
+     * @return the control panel
+     */
     public ControlPanel getControlPanel() {
         return controlPanel;
     }
 
+    /**
+     * Gets the game state
+     *
+     * @return the game object
+     */
     public Game getGame() {
         return game;
     }

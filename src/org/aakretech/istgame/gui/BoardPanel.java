@@ -29,6 +29,11 @@ public class BoardPanel extends JPanel implements Runnable {
     private String bgText;
     private Color bgTextColor = new Color(10,100,10);
 
+    /**
+     * Creates a new game panel
+     *
+     * @param game the game state
+     */
     public BoardPanel(Game game) {
         super();
         this.game = game;
@@ -37,10 +42,16 @@ public class BoardPanel extends JPanel implements Runnable {
         this.boardIndexToScreenCoordinateMap = new HashMap<Integer, Point>(game.getBoard().size());
     }
 
+    /**
+     * Called when a player guesses
+     */
     public void guessed() {
         repaint();
     }
 
+    /**
+     * The run method that causes repaint to be drawn at regular intervals
+     */
     public void run() {
         while(true) {
             repaint();
@@ -51,6 +62,11 @@ public class BoardPanel extends JPanel implements Runnable {
         }
     }
 
+    /**
+     * Custom painting that draws a background and the boxes
+     *
+     * @param g the graphics context
+     */
     @Override
     public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
@@ -85,6 +101,11 @@ public class BoardPanel extends JPanel implements Runnable {
         }
     }
 
+    /**
+     * method call that draws and animates the background
+     *
+     * @param g2 the graphics context
+     */
     private void bgAnim(Graphics2D g2) {
 
         if(bgText == null) {
@@ -114,6 +135,11 @@ public class BoardPanel extends JPanel implements Runnable {
         }
     }
 
+    /**
+     * Generates a big string with random 0's and 1's
+     *
+     * @return a heavily spaced binary string
+     */
     private String generateBgString() {
         StringBuffer sb = new StringBuffer();
         for(int lines = 0; lines < 100; lines++) {
@@ -127,19 +153,39 @@ public class BoardPanel extends JPanel implements Runnable {
         return sb.toString();
     }
 
+    /**
+     * Gets the board index to screen coordinate map
+     *
+     * @return a map for finding the positions of individual boxes
+     */
     public Map<Integer, Point> getBoardIndexToScreenCoordinateMap() {
         return boardIndexToScreenCoordinateMap;
     }
 
+    /**
+     * Gets the size of the component
+     *
+     * @return the preferred/minimum size of the component
+     */
     @Override
     public Dimension getPreferredSize() {
         return new Dimension(boardWidth, boardHeight);
     }
 
+    /**
+     * Calculates the width of the board
+     *
+     * @return the width of the board
+     */
     private int calculateWidth() {
         return ((game.getBoardWidth() + 2) * (CELLSIZE + CELLSPACE)) - CELLSPACE;
     }
 
+    /**
+     * Calculates the height of the board
+     *
+     * @return the height of the board
+     */
     private int calculateHeight() {
         return ((game.getBoardHeight() + 2) * (CELLSIZE + CELLSPACE)) - CELLSPACE;
     }

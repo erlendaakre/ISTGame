@@ -44,7 +44,7 @@ public class BoardMouseListener extends MouseAdapter {
 
             gameWindow.checkWin();
             gameWindow.getControlPanel().updateText(game.getScore());
-            gameWindow.getControlPanel().setCurrentPlayer(game.getCurrentPlayer());
+            gameWindow.getControlPanel().setCurrentPlayerIndicator(game.getCurrentPlayer());
             gameWindow.getBoardPanel().repaint();
 
 
@@ -59,7 +59,7 @@ public class BoardMouseListener extends MouseAdapter {
                         game.aiMove();
                         gameWindow.checkWin();
                         gameWindow.getControlPanel().updateText(game.getScore());
-                        gameWindow.getControlPanel().setCurrentPlayer(game.getCurrentPlayer());
+                        gameWindow.getControlPanel().setCurrentPlayerIndicator(game.getCurrentPlayer());
                         gameWindow.getBoardPanel().repaint();
 
                     }

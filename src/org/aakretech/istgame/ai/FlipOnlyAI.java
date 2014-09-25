@@ -8,6 +8,10 @@ package org.aakretech.istgame.ai;
  */
 public class FlipOnlyAI extends SimpleAI {
 
+    /**
+     * Always opts to not guess
+     * @return -1
+     */
     @Override
     public int guess() {
         return -1;
