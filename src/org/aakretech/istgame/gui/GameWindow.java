@@ -31,6 +31,9 @@ public class GameWindow extends JFrame {
 
         pack();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        Thread animThread = new Thread(gamePanel);
+        animThread.start();
     }
 
     public void checkWin() {

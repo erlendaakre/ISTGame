@@ -11,7 +11,7 @@ import org.aakretech.istgame.logic.Game;
  * 
  * @author Erlend Aakre
  */
-public class BoardPanel extends JPanel {
+public class BoardPanel extends JPanel implements Runnable {
 
     public static final int CELLSIZE = 50;
     private static final int CELLSPACE = 10;
@@ -23,6 +23,11 @@ public class BoardPanel extends JPanel {
     public static final Color COLOR_1 = Color.YELLOW;
     private Map<Integer, Point> boardIndexToScreenCoordinateMap;
     private Game game;
+
+    private int animX;
+    private int animY;
+    private String bgText;
+    private Color bgTextColor = new Color(10,100,10);
 
     public BoardPanel(Game game) {
         super();
@@ -36,12 +41,24 @@ public class BoardPanel extends JPanel {
         repaint();
     }
 
+    public void run() {
+        while(true) {
+            repaint();
+
+            try {
+                Thread.sleep(1000/25);
+            } catch (InterruptedException e) { }
+        }
+    }
+
     @Override
     public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
 
         g2.setColor(COLOR_BACKGROUND);
         g2.fillRect(0, 0, boardWidth, boardHeight);
+
+        bgAnim(g2);
 
         int x = CELLSIZE + CELLSPACE;
         int y = CELLSIZE + CELLSPACE;
@@ -66,6 +83,48 @@ public class BoardPanel extends JPanel {
 
             x += CELLSIZE + CELLSPACE;
         }
+    }
+
+    private void bgAnim(Graphics2D g2) {
+
+        if(bgText == null) {
+            bgText = generateBgString();
+        }
+
+        g2.setColor(bgTextColor.darker().darker());
+        int y = -100 + 1;
+        for (String line : bgText.split("\n")) {
+            g2.drawString(line, animX + 1, y += animY + g2.getFontMetrics().getHeight());
+
+        }
+
+        y = -100;
+        g2.setColor(bgTextColor);
+        for (String line : bgText.split("\n")) {
+            g2.drawString(line, animX , y += animY + g2.getFontMetrics().getHeight());
+
+        }
+
+
+        //animX++;
+        animY++;
+        if(animY > 25) {
+            animY = 0;
+            bgText = generateBgString();
+        }
+    }
+
+    private String generateBgString() {
+        StringBuffer sb = new StringBuffer();
+        for(int lines = 0; lines < 100; lines++) {
+            StringBuffer line = new StringBuffer("                                                                   " +
+                    "                                                    ");
+            for(int i = 0; i < 10; i++) {
+                line.setCharAt((int)(Math.random()*line.length()), Math.random() < 0.5D ? '0' : '1');
+            }
+            sb.append(line).append("\n");
+        }
+        return sb.toString();
     }
 
     public Map<Integer, Point> getBoardIndexToScreenCoordinateMap() {
