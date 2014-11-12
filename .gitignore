@@ -3,3 +3,6 @@
 /manifest.mf
 /build.xml
 /nbproject/
+/.idea/
+/out
+/ISTGame.iml
