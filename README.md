@@ -1,5 +1,6 @@
 ISTGame
 =======
+![Alt text](/resources/screenshots/cpu.png?raw=true "Playing vs CPU")
 A simple game based on the IST cognitive test (Information Sampling Task), which is a test for impulsivity and decision making.
 In the traditional test a 5x5 array of grey boxes is presented on screen, and the subject clicks each box to reveal one of two colours
 hidden under the box. The amount of score possible is decreased for each box that is opened, and at any point the subject may guess the
