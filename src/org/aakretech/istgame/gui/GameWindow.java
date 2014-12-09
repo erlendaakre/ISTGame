@@ -17,19 +17,42 @@ public class GameWindow extends JFrame {
     private ControlPanel controlPanel;
     private BoardPanel gamePanel;
 
-    public GameWindow(Game game) {
+    /**
+     * Displays the start / splash screen
+     */
+    public void initSplash() {
+        getContentPane().removeAll();
+        SplashPanel splashPanel = new SplashPanel(this);
+
+        getContentPane().add(splashPanel);
+
+        Thread splashAnimThread = new Thread(splashPanel);
+        splashAnimThread.start();
+
+        pack();
+        setVisible(true);
+    }
+
+    /**
+     * Displays the actual game
+     *
+     * @param game the game to display
+     */
+    public void initGame(Game game) {
+        getContentPane().removeAll();
         this.game = game;
 
-        this.setLayout(new BorderLayout());
+        getContentPane().setLayout(new BorderLayout());
 
         controlPanel = new ControlPanel(this);
-        add(controlPanel, BorderLayout.NORTH);
+        getContentPane().add(controlPanel, BorderLayout.NORTH);
 
         gamePanel = new BoardPanel(game);
         gamePanel.addMouseListener(new BoardMouseListener(game, this));
-        add(gamePanel, BorderLayout.CENTER);
+        getContentPane().add(gamePanel, BorderLayout.CENTER);
 
         pack();
+        setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         Thread animThread = new Thread(gamePanel);

@@ -1,14 +1,19 @@
 package org.aakretech.istgame.gui;
 
+import org.aakretech.istgame.ai.SimpleAI;
+import org.aakretech.istgame.logic.Game;
+import org.aakretech.istgame.logic.Player;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class SplashPanel extends JPanel implements Runnable {
 
     private static final GameFont GAMEFONT = new GameFont();
     public static final Color COLOR_BACKGROUND = Color.BLACK;
-
 
     JButton pvpButton;
     JButton pvcpuButton;
@@ -18,9 +23,7 @@ public class SplashPanel extends JPanel implements Runnable {
 
     ArrayList<AnimLine> lines;
 
-
-
-    public SplashPanel() {
+    public SplashPanel(final GameWindow gameWindow) {
         lines = new ArrayList<>(10);
 
         for(int i = 0; i < 10; i++) {
@@ -30,7 +33,6 @@ public class SplashPanel extends JPanel implements Runnable {
             lines.add(line);
         }
 
-
         setLayout(null);
         setPreferredSize(new Dimension(600, 220));
 
@@ -38,14 +40,46 @@ public class SplashPanel extends JPanel implements Runnable {
         pvpButton.setFont(GAMEFONT.getWinFont());
         pvpButton.setBounds(120,50, 120, 80);
 
+        pvpButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Player p1 = new Player("P1");
+                Player p2 = new Player("P2");
+
+                java.util.List<Player> players = new ArrayList<Player>(2);
+                players.add(p1);
+                players.add(p2);
+
+                Game g = new Game(5, 5, players, 250, 20, 80);
+                gameWindow.initGame(g);
+            }
+        });
+
         pvcpuButton = new JButton("CPU");
         pvcpuButton.setFont(GAMEFONT.getWinFont());
         pvcpuButton.setBounds(360,50, 120, 80);
 
+        pvcpuButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Player p1 = new Player("P1");
+                Player p2 = new SimpleAI();
+
+                java.util.List<Player> players = new ArrayList<Player>(2);
+                players.add(p1);
+                players.add(p2);
+
+                Game g = new Game(5, 5, players, 250, 20, 80);
+
+                ((SimpleAI) p2).setGame(g);
+
+                gameWindow.initGame(g);
+            }
+        });
+
         add(pvpButton);
         add(pvcpuButton);
     }
-
 
 /**
  * The run method that causes repaint to be drawn at regular intervals
