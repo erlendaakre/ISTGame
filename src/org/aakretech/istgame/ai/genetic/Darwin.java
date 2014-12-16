@@ -35,7 +35,7 @@ public class Darwin {
     }
 
     public static void main(String[] main) {
-        Darwin darwin = new Darwin(100, 3, 500, 5, 1000, 0.015D, 0.5D, 2);
+        Darwin darwin = new Darwin(100, 3, 500, 5, 200, 0.015D, 0.5D, 2);
 
         darwin.initPopulation();
         darwin.evaluate();
@@ -46,13 +46,23 @@ public class Darwin {
             darwin.currentGeneration = generation + 1;
             darwin.evolvePopulation();
             darwin.evaluate();
+        }
+        darwin.printFitnessEvaltuation();
+        darwin.printFittestIndividual();
+    }
+
+    public GeneticAI evolvePlayer() {
+        initPopulation();
+        evaluate();
+
+        for (int generation = 0; generation < maxGenerations; generation++) {
+            System.out.println("Evolving generation: " + (generation + 1));
+            currentGeneration = generation + 1;
+            evolvePopulation();
+            evaluate();
 
         }
-
-        darwin.evaluate();
-        darwin.printFitnessEvaltuation();
-
-        darwin.printFittestIndividual();
+        return getFittestIndividual();
     }
 
     public void evolvePopulation() {

@@ -12,7 +12,7 @@ public class GeneticAI extends SimpleAI {
     private int fitness;
 
     public GeneticAI(double g1, double g2, double g3, double g4, double g5) {
-        super();
+        super("GEN");
         gene_percentage_uncovered = g1;
         gene_number_of_yellow = g2;
         gene_number_of_blue = g3;

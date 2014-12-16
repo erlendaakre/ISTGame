@@ -25,6 +25,15 @@ public class SimpleAI extends Player {
     }
 
     /**
+     * Creates a new Simple AI
+     * @param name the name of the AI
+     */
+    public SimpleAI(String name) {
+        super(name);
+        this.human = false;
+    }
+
+    /**
      * Guesses which value is most common in the game
      * @return  the value to guess, or -1 to not guess
      */
