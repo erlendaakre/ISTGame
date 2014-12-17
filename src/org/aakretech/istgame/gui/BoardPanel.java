@@ -27,7 +27,7 @@ public class BoardPanel extends JPanel implements Runnable {
     private int animX;
     private int animY;
     private String bgText;
-    private Color bgTextColor = new Color(10,100,10);
+    public static final Color BG_TEXT_COLOR = new Color(10,100,10);
 
     /**
      * Creates a new game panel
@@ -112,7 +112,7 @@ public class BoardPanel extends JPanel implements Runnable {
             bgText = generateBgString();
         }
 
-        g2.setColor(bgTextColor.darker().darker());
+        g2.setColor(BG_TEXT_COLOR.darker().darker());
         int y = -100 + 1;
         for (String line : bgText.split("\n")) {
             g2.drawString(line, animX + 1, y += animY + g2.getFontMetrics().getHeight());
@@ -120,7 +120,7 @@ public class BoardPanel extends JPanel implements Runnable {
         }
 
         y = -100;
-        g2.setColor(bgTextColor);
+        g2.setColor(BG_TEXT_COLOR);
         for (String line : bgText.split("\n")) {
             g2.drawString(line, animX , y += animY + g2.getFontMetrics().getHeight());
 

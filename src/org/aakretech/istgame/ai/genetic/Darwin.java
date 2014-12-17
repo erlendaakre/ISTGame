@@ -51,7 +51,14 @@ public class Darwin {
         darwin.printFittestIndividual();
     }
 
-    public GeneticAI evolvePlayer() {
+    /**
+     * Evolve a single AI player
+     *
+     * @param sleep the amount (ms) to sleep between each generation
+     *
+     * @return the fittest player evolved
+     */
+    public GeneticAI evolvePlayer(int sleep) {
         initPopulation();
         evaluate();
 
@@ -60,7 +67,11 @@ public class Darwin {
             currentGeneration = generation + 1;
             evolvePopulation();
             evaluate();
-
+            try {
+                Thread.sleep(sleep);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
         return getFittestIndividual();
     }
@@ -217,5 +228,9 @@ public class Darwin {
             population.add(individual);
         }
         System.out.println("Population initialized  : " + population.size());
+    }
+
+    public int getCurrentGeneration() {
+        return currentGeneration;
     }
 }

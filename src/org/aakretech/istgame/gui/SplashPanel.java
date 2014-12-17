@@ -10,27 +10,29 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class SplashPanel extends JPanel implements Runnable {
 
     private static final GameFont GAMEFONT = new GameFont();
-    public static final Color COLOR_BACKGROUND = Color.BLACK;
+    public static final Random PRNG = new Random();
 
     JButton pvpButton;
     JButton pvcpuButton;
-    private Color bgTextColor = new Color(10, 100, 10);
 
     private int color = 15000;
 
     ArrayList<AnimLine> lines;
+    ArrayList<EvolveCircle> circles;
 
     private GameWindow gameWindow;
     private boolean evolving; // true if currently evolving AI player
+    private Darwin darwin;
 
     public SplashPanel(final GameWindow gameWindow) {
         this.gameWindow = gameWindow;
-        lines = new ArrayList<>(10);
 
+        lines = new ArrayList<>(10);
         for (int i = 0; i < 10; i++) {
             AnimLine line = new AnimLine(1, i);
             color += 240;
@@ -38,8 +40,15 @@ public class SplashPanel extends JPanel implements Runnable {
             lines.add(line);
         }
 
+
         setLayout(null);
         setPreferredSize(new Dimension(600, 220));
+
+        circles = new ArrayList<>(50);
+        for(int i = 0; i < 50; i++) {
+            EvolveCircle c = new EvolveCircle(PRNG.nextInt(600), PRNG.nextInt(220), PRNG.nextInt(20)+20, BoardPanel.BG_TEXT_COLOR);
+            circles.add(c);
+        }
 
         pvpButton = new JButton("PVP");
         pvpButton.setFont(GAMEFONT.getWinFont());
@@ -84,8 +93,14 @@ public class SplashPanel extends JPanel implements Runnable {
             public void run() {
                 Player p1 = new Player("P1");
 
-                Darwin darwin = new Darwin(100, 3, 500, 5, 100, 0.015D, 0.5D, 2);
-                Player p2 = darwin.evolvePlayer();
+                darwin = new Darwin(100, 3, 500, 5, 100, 0.015D, 0.5D, 2);
+                Player p2 = darwin.evolvePlayer(25);
+
+                try {
+                    Thread.sleep(750);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
                 java.util.List<Player> players = new ArrayList<Player>(2);
                 players.add(p1);
@@ -125,7 +140,7 @@ public class SplashPanel extends JPanel implements Runnable {
     public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
 
-        g2.setColor(COLOR_BACKGROUND);
+        g2.setColor(BoardPanel.COLOR_BACKGROUND);
         g2.fillRect(0, 0, getWidth(), getHeight());
 
         if (evolving) {
@@ -168,9 +183,12 @@ public class SplashPanel extends JPanel implements Runnable {
      * @param g2 the graphics context
      */
     private void evolveAnim(Graphics2D g2) {
-        int size = ((int) (Math.random() * 30)) + 5;
-        g2.setColor(Color.ORANGE);
-        g2.drawOval((int) (Math.random() * getWidth()), (int) (Math.random() * getHeight()), size, size);
+        for (int i = 0; i < circles.size(); i++) {
+            EvolveCircle c = circles.get(i);
+            g2.setColor(c.color);
+            Point p = c.getLocation(darwin.getCurrentGeneration());
+            g2.drawOval(p.x, p.y, c.size, c.size);
+        }
 
         g2.setColor(Color.GREEN);
         g2.drawString("Evolving player....", 200, 50);
@@ -189,5 +207,27 @@ class AnimLine {
     public AnimLine(int y, int speed) {
         this.y = y;
         this.speed = speed;
+    }
+}
+
+class EvolveCircle {
+    public int x;
+    public int y;
+    public int size;
+    public Color color;
+
+    public EvolveCircle(int x, int y, int size, Color color) {
+        this.x = x;
+        this.y = y;
+        this.size = size;
+        this.color = color;
+    }
+
+    public Point getLocation(int generation) {
+        Point p = new Point();
+        int range = 101 - generation;
+        p.x = x + (SplashPanel.PRNG.nextInt(range*2) - range);
+        p.y = y + (SplashPanel.PRNG.nextInt(range*2) - range);
+        return p;
     }
 }
