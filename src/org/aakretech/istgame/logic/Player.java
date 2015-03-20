@@ -7,7 +7,7 @@ package org.aakretech.istgame.logic;
  */
 public class Player {
 
-    private String name;
+    protected String name;
     private int score;
     protected boolean human;
 

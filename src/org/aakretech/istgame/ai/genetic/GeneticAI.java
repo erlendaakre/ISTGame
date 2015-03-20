@@ -39,11 +39,11 @@ public class GeneticAI extends SimpleAI {
     }
 
     public void randomizeGenes() {
-        gene_percentage_uncovered = prng.nextDouble() * 100;
-        gene_number_of_yellow = prng.nextDouble() * 25;
-        gene_number_of_blue = prng.nextDouble() * 25;
-        gene_number_total = prng.nextDouble() * 25;
-        gene_random = prng.nextDouble() * 10;
+        gene_percentage_uncovered = prng.nextDouble() * 1000;
+        gene_number_of_yellow = prng.nextDouble() * 250;
+        gene_number_of_blue = prng.nextDouble() * 250;
+        gene_number_total = prng.nextDouble() * 250;
+        gene_random = prng.nextDouble() * 100;
 
         fitness = 1;
     }

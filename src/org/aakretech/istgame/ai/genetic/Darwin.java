@@ -19,6 +19,7 @@ public class Darwin {
     private double uniformityRate;
     private int crossOverOffspring;
 
+
     public Darwin(int popSize, int elitism, int goalScore, int numberOfGamesToPlay, int maxGenerations, double mutationRate,
             double uniformityRate, int crossOverOffspring) {
         prng = new Random();
@@ -35,17 +36,17 @@ public class Darwin {
     }
 
     public static void main(String[] main) {
-        Darwin darwin = new Darwin(100, 3, 500, 5, 200, 0.015D, 0.5D, 2);
+        Darwin darwin = new Darwin(100, 5, 500, 10, 50, 0.015D, 0.5D, 2);
 
         darwin.initPopulation();
         darwin.evaluate();
         darwin.printFitnessEvaltuation();
 
-        for (int generation = 0; generation < darwin.maxGenerations; generation++) {
-            System.out.println("Evolving generation: " + (generation + 1));
-            darwin.currentGeneration = generation + 1;
+        while(darwin.getCurrentGeneration() < darwin.maxGenerations) {
+            System.out.println("Evolving generation: " + darwin.getCurrentGeneration());
             darwin.evolvePopulation();
             darwin.evaluate();
+//            darwin.printFitnessEvaltuation();
         }
         darwin.printFitnessEvaltuation();
         darwin.printFittestIndividual();
@@ -62,9 +63,8 @@ public class Darwin {
         initPopulation();
         evaluate();
 
-        for (int generation = 0; generation < maxGenerations; generation++) {
-            System.out.println("Evolving generation: " + (generation + 1));
-            currentGeneration = generation + 1;
+        while(getCurrentGeneration() < maxGenerations) {
+            System.out.println("Evolving player, generation: " + getCurrentGeneration());
             evolvePopulation();
             evaluate();
             try {
@@ -77,7 +77,7 @@ public class Darwin {
     }
 
     public void evolvePopulation() {
-        List<GeneticAI> newPopulaion = new ArrayList<GeneticAI>(popSize);
+        List<GeneticAI> newPopulation = new ArrayList<GeneticAI>(popSize);
 
         //Select Elitism
         List<GeneticAI> elite = new ArrayList<GeneticAI>(elitism);
@@ -86,9 +86,7 @@ public class Darwin {
             elite.add(eliteAI);
             population.remove(eliteAI);
         }
-
-        // Allow elite to crossOver and mutate
-        population.addAll(elite);
+        population.addAll(elite); // Allow elite to crossOver and mutate
 
         int count = elitism;
         while (count <= popSize) {
@@ -97,16 +95,16 @@ public class Darwin {
 
             List<GeneticAI> offSpring = crossOver(individual1, individual2);
             for (GeneticAI child : offSpring) {
-                newPopulaion.add(child);
+                newPopulation.add(child);
                 count++;
             }
         }
 
-        for (int i = 0; i < newPopulaion.size(); i++) {
-            mutate(newPopulaion.get(i));
+        for (int i = 0; i < newPopulation.size(); i++) {
+            mutate(newPopulation.get(i));
         }
 
-        population = newPopulaion;
+        population = newPopulation;
         population.addAll(elite);
     }
 
@@ -151,24 +149,21 @@ public class Darwin {
     }
 
     public void mutate(GeneticAI individual) {
+        double mutationFactor = ((prng.nextDouble()/5)-0.1D) + 1; // 0.9 - 1.1
+
         if (prng.nextDouble() <= mutationRate) {
-            double mutationFactor = prng.nextDouble() + 0.5D;
             individual.gene_percentage_uncovered *= mutationFactor;
         }
         if (prng.nextDouble() <= mutationRate) {
-            double mutationFactor = prng.nextDouble() + 0.5D;
             individual.gene_number_of_yellow *= mutationFactor;
         }
         if (prng.nextDouble() <= mutationRate) {
-            double mutationFactor = prng.nextDouble() + 0.5D;
             individual.gene_number_of_blue *= mutationFactor;
         }
         if (prng.nextDouble() <= mutationRate) {
-            double mutationFactor = prng.nextDouble() + 0.5D;
             individual.gene_number_total *= mutationFactor;
         }
         if (prng.nextDouble() <= mutationRate) {
-            double mutationFactor = prng.nextDouble() + 0.5D;
             individual.gene_random *= mutationFactor;
         }
     }
@@ -194,9 +189,19 @@ public class Darwin {
     }
 
     private void evaluate() {
+        currentGeneration++;
         totalFitness = 0.0D;
         for (GeneticAI individual : population) {
             totalFitness += individual.evaluateFitness(numberOfGamesToPlay, goalScore);
+        }
+
+        // Prevent trying to evolve/mutate a stale population
+        if((currentGeneration > maxGenerations / 2) && totalFitness < (popSize * 2)) {
+            System.out.println("WARNING: No useful evolution happened in " + (maxGenerations / 2) + " generations. resetting all genes!");
+            currentGeneration = 0;
+            for(GeneticAI individual : population) {
+                individual.randomizeGenes();
+            }
         }
     }
 
@@ -228,6 +233,12 @@ public class Darwin {
             population.add(individual);
         }
         System.out.println("Population initialized  : " + population.size());
+    }
+
+    private void printPopulation() {
+        for(GeneticAI individual : population) {
+            System.out.println(individual.getFitness());
+        }
     }
 
     public int getCurrentGeneration() {

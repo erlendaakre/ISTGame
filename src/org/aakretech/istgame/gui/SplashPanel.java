@@ -16,6 +16,7 @@ public class SplashPanel extends JPanel implements Runnable {
 
     private static final GameFont GAMEFONT = new GameFont();
     public static final Random PRNG = new Random();
+    public static final int MAX_GENERATIONS = 50;
 
     JButton pvpButton;
     JButton pvcpuButton;
@@ -28,6 +29,7 @@ public class SplashPanel extends JPanel implements Runnable {
     private GameWindow gameWindow;
     private boolean evolving; // true if currently evolving AI player
     private Darwin darwin;
+
 
     public SplashPanel(final GameWindow gameWindow) {
         this.gameWindow = gameWindow;
@@ -93,7 +95,7 @@ public class SplashPanel extends JPanel implements Runnable {
             public void run() {
                 Player p1 = new Player("P1");
 
-                darwin = new Darwin(100, 3, 500, 5, 100, 0.015D, 0.5D, 2);
+                darwin = new Darwin(100, 5, 500, 10, MAX_GENERATIONS, 0.015D, 0.5D, 2);
                 Player p2 = darwin.evolvePlayer(25);
 
                 try {
@@ -225,7 +227,10 @@ class EvolveCircle {
 
     public Point getLocation(int generation) {
         Point p = new Point();
-        int range = 101 - generation;
+        int range = SplashPanel.MAX_GENERATIONS - generation;
+        if(range < 1) {
+            range = 1;
+        }
         p.x = x + (SplashPanel.PRNG.nextInt(range*2) - range);
         p.y = y + (SplashPanel.PRNG.nextInt(range*2) - range);
         return p;
