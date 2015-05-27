@@ -32,8 +32,8 @@ public class GuessButtonListener extends MouseAdapter {
         int guess = (Integer) ((JLabel) e.getSource()).getClientProperty("guess");
         System.out.println("PLAYER " + gameWindow.getGame().getCurrentPlayer().getName() + " GUESSED " + guess);
         gameWindow.getGame().guess(guess);
-        gameWindow.getBoardPanel().guessed();
-        gameWindow.getControlPanel().guessed();
-        gameWindow.checkWin();
+        gameWindow.getBoardPanel().playerGuessed();
+        gameWindow.getControlPanel().resetGameForNewRound();
+        gameWindow.checkForWinner();
     }
 }

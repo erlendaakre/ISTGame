@@ -8,20 +8,21 @@ import org.aakretech.istgame.logic.Player;
  * The control panel at the top of the GUI, shows player score, remaining
  * score for game, and has two coloured boxes used for making the guess.
  *
- * @author Erlend
+ * @author Erlend Aakre
  */
 public final class ControlPanel extends JPanel {
+
+    public static final Color COLOR_BACKGROUND = Color.DARK_GRAY;
+    public static final Color COLOR_TEXT = Color.LIGHT_GRAY;
+    public static final Color COLOR_TEXT_CURRENT_PLAYER = Color.RED;
 
     private GameWindow gameWindow;
     private int panelWidth;
     private int panelHeight;
-    public static final Color COLOR_BACKGROUND = Color.DARK_GRAY;
-    public static final Color COLOR_TEXT = Color.LIGHT_GRAY;
-    public static final Color COLOR_TEXT_CURRENT_PLAYER = Color.RED;
-    private JLabel p1Label;
-    private JLabel p2Label;
-    private JLabel p1LabelCurrentPlayer;
-    private JLabel p2LabelCurrentPlayer;
+    private JLabel p1NameLabel;
+    private JLabel p2NameLabel;
+    private JLabel p1CurrentPlayerIndicator;
+    private JLabel p2CurrentPlayerIndicator;
     private JLabel scoreLabel;
     private JLabel guessYellowButton;
     private JLabel guessBlueButton;
@@ -41,26 +42,26 @@ public final class ControlPanel extends JPanel {
         this.setBackground(COLOR_BACKGROUND);
         this.setLayout(null);
 
-        p1Label = new JLabel(gameWindow.getGame().getPlayers().get(0).getName() + ": " + gameWindow.getGame().getPlayers().get(0).getScore());
-        p1Label.setFont(GameWindow.GAMEFONT.getPlayerFont());
-        p1Label.setForeground(COLOR_TEXT);
-        p1Label.setBounds(35, 2, 120, 20);
+        p1NameLabel = new JLabel(gameWindow.getGame().getPlayers().get(0).getName() + ": " + gameWindow.getGame().getPlayers().get(0).getScore());
+        p1NameLabel.setFont(GameWindow.GAMEFONT.getPlayerFont());
+        p1NameLabel.setForeground(COLOR_TEXT);
+        p1NameLabel.setBounds(35, 2, 120, 20);
 
-        p1LabelCurrentPlayer = new JLabel(">>>");
-        p1LabelCurrentPlayer.setFont(GameWindow.GAMEFONT.getPlayerFont());
-        p1LabelCurrentPlayer.setForeground(COLOR_TEXT_CURRENT_PLAYER);
-        p1LabelCurrentPlayer.setBounds(2, 2, 35, 20);
+        p1CurrentPlayerIndicator = new JLabel(">>>");
+        p1CurrentPlayerIndicator.setFont(GameWindow.GAMEFONT.getPlayerFont());
+        p1CurrentPlayerIndicator.setForeground(COLOR_TEXT_CURRENT_PLAYER);
+        p1CurrentPlayerIndicator.setBounds(2, 2, 35, 20);
 
 
-        p2Label = new JLabel(gameWindow.getGame().getPlayers().get(1).getName() + ": " + gameWindow.getGame().getPlayers().get(1).getScore());
-        p2Label.setFont(GameWindow.GAMEFONT.getPlayerFont());
-        p2Label.setForeground(COLOR_TEXT);
-        p2Label.setBounds(35, 30, 120, 20);
+        p2NameLabel = new JLabel(gameWindow.getGame().getPlayers().get(1).getName() + ": " + gameWindow.getGame().getPlayers().get(1).getScore());
+        p2NameLabel.setFont(GameWindow.GAMEFONT.getPlayerFont());
+        p2NameLabel.setForeground(COLOR_TEXT);
+        p2NameLabel.setBounds(35, 30, 120, 20);
 
-        p2LabelCurrentPlayer = new JLabel(">>>");
-        p2LabelCurrentPlayer.setFont(GameWindow.GAMEFONT.getPlayerFont());
-        p2LabelCurrentPlayer.setForeground(COLOR_TEXT_CURRENT_PLAYER);
-        p2LabelCurrentPlayer.setBounds(2, 30, 35, 20);
+        p2CurrentPlayerIndicator = new JLabel(">>>");
+        p2CurrentPlayerIndicator.setFont(GameWindow.GAMEFONT.getPlayerFont());
+        p2CurrentPlayerIndicator.setForeground(COLOR_TEXT_CURRENT_PLAYER);
+        p2CurrentPlayerIndicator.setBounds(2, 30, 35, 20);
 
         guessYellowButton = new JLabel();
         guessYellowButton.putClientProperty("guess", 1);
@@ -83,10 +84,10 @@ public final class ControlPanel extends JPanel {
         scoreLabel.setForeground(COLOR_TEXT);
         scoreLabel.setBounds(355, 2, 100, 50);
 
-        add(p1Label);
-        add(p2Label);
-        add(p1LabelCurrentPlayer);
-        add(p2LabelCurrentPlayer);
+        add(p1NameLabel);
+        add(p2NameLabel);
+        add(p1CurrentPlayerIndicator);
+        add(p2CurrentPlayerIndicator);
         add(guessYellowButton);
         add(guessBlueButton);
         add(scoreLabel);
@@ -99,7 +100,7 @@ public final class ControlPanel extends JPanel {
     /**
      * Called when the game is over to stop further input
      */
-    public void gameComplete() {
+    public void setGameComplete() {
         guessBlueButton.removeMouseListener(buttonListener);
         guessYellowButton.removeMouseListener(buttonListener);
     }
@@ -109,9 +110,9 @@ public final class ControlPanel extends JPanel {
      *
      * @param newScore the new score remaining on this round
      */
-    public void updateText(int newScore) {
-        p1Label.setText(gameWindow.getGame().getPlayers().get(0).getName() + ": " + gameWindow.getGame().getPlayers().get(0).getScore());
-        p2Label.setText(gameWindow.getGame().getPlayers().get(1).getName() + ": " + gameWindow.getGame().getPlayers().get(1).getScore());
+    public void updateScoreText(int newScore) {
+        p1NameLabel.setText(gameWindow.getGame().getPlayers().get(0).getName() + ": " + gameWindow.getGame().getPlayers().get(0).getScore());
+        p2NameLabel.setText(gameWindow.getGame().getPlayers().get(1).getName() + ": " + gameWindow.getGame().getPlayers().get(1).getScore());
         scoreLabel.setText("" + newScore);
     }
 
@@ -122,19 +123,19 @@ public final class ControlPanel extends JPanel {
      */
     public void setCurrentPlayerIndicator(Player player) {
         if (player == gameWindow.getGame().getPlayers().get(0)) {
-            p1LabelCurrentPlayer.setVisible(true);
-            p2LabelCurrentPlayer.setVisible(false);
+            p1CurrentPlayerIndicator.setVisible(true);
+            p2CurrentPlayerIndicator.setVisible(false);
         } else if (player == gameWindow.getGame().getPlayers().get(1)) {
-            p1LabelCurrentPlayer.setVisible(false);
-            p2LabelCurrentPlayer.setVisible(true);
+            p1CurrentPlayerIndicator.setVisible(false);
+            p2CurrentPlayerIndicator.setVisible(true);
         }
     }
 
     /**
      * Calls when a guess was made, resets game score to 100
      */
-    public void guessed() {
-        updateText(100);
+    public void resetGameForNewRound() {
+        updateScoreText(100);
         setCurrentPlayerIndicator(gameWindow.getGame().getCurrentPlayer());
     }
 }

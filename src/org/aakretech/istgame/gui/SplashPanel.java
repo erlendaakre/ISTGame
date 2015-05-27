@@ -67,7 +67,7 @@ public class SplashPanel extends JPanel implements Runnable {
                 players.add(p2);
 
                 Game g = new Game(5, 5, players, 250, 20, 80);
-                gameWindow.initGame(g);
+                gameWindow.showAndStartGame(g);
             }
         });
 
@@ -112,7 +112,7 @@ public class SplashPanel extends JPanel implements Runnable {
                 ((GeneticAI) p2).setGame(g);
 
                 evolving = false;
-                gameWindow.initGame(g);
+                gameWindow.showAndStartGame(g);
             }
         });
 

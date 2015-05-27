@@ -15,12 +15,12 @@ public class GameWindow extends JFrame {
     private Game game;
     public static final GameFont GAMEFONT = new GameFont();
     private ControlPanel controlPanel;
-    private BoardPanel gamePanel;
+    private BoardPanel boardPanel;
 
     /**
      * Displays the start / splash screen
      */
-    public void initSplash() {
+    public void showSplashScreen() {
         getContentPane().removeAll();
         SplashPanel splashPanel = new SplashPanel(this);
 
@@ -34,11 +34,11 @@ public class GameWindow extends JFrame {
     }
 
     /**
-     * Displays the actual game
+     * Displays the actual game (control panel and the board)
      *
      * @param game the game to display
      */
-    public void initGame(Game game) {
+    public void showAndStartGame(Game game) {
         getContentPane().removeAll();
         this.game = game;
 
@@ -47,27 +47,27 @@ public class GameWindow extends JFrame {
         controlPanel = new ControlPanel(this);
         getContentPane().add(controlPanel, BorderLayout.NORTH);
 
-        gamePanel = new BoardPanel(game);
-        gamePanel.addMouseListener(new BoardMouseListener(game, this));
-        getContentPane().add(gamePanel, BorderLayout.CENTER);
+        boardPanel = new BoardPanel(game);
+        boardPanel.addMouseListener(new BoardMouseListener(game, this));
+        getContentPane().add(boardPanel, BorderLayout.CENTER);
 
         pack();
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        Thread animThread = new Thread(gamePanel);
+        Thread animThread = new Thread(boardPanel);
         animThread.start();
     }
 
     /**
      * Checks the game state to see if there is a winner, if so the winner panel is displayed
      */
-    public void checkWin() {
+    public void checkForWinner() {
         for (Player p : game.getPlayers()) {
             if (p.getScore() >= game.getGoalScore()) {
-                controlPanel.gameComplete();
-                remove(gamePanel);
-                add(new WinnerPanel(p, gamePanel.getWidth(), gamePanel.getHeight()));
+                controlPanel.setGameComplete();
+                remove(boardPanel);
+                add(new WinnerPanel(p, boardPanel.getWidth(), boardPanel.getHeight()));
             }
         }
     }
@@ -78,7 +78,7 @@ public class GameWindow extends JFrame {
      * @return the board panel
      */
     public BoardPanel getBoardPanel() {
-        return gamePanel;
+        return boardPanel;
     }
 
     /**

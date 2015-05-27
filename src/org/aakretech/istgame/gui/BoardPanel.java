@@ -8,19 +8,20 @@ import org.aakretech.istgame.logic.Game;
 
 /**
  * Panel that shows the actual game boards with the coloured boxes
- * 
+ *
  * @author Erlend Aakre
  */
 public class BoardPanel extends JPanel implements Runnable {
 
-    public static final int CELLSIZE = 50;
-    private static final int CELLSPACE = 10;
-    private int boardWidth;
-    private int boardHeight;
+    public static final int CELL_SIZE = 50;
+    private static final int CELL_SPACE = 10;
     public static final Color COLOR_BACKGROUND = Color.BLACK;
     public static final Color COLOR_NULL = Color.GRAY;
     public static final Color COLOR_0 = Color.CYAN;
     public static final Color COLOR_1 = Color.YELLOW;
+
+    private int boardWidth;
+    private int boardHeight;
     private Map<Integer, Point> boardIndexToScreenCoordinateMap;
     private Game game;
 
@@ -45,7 +46,7 @@ public class BoardPanel extends JPanel implements Runnable {
     /**
      * Called when a player guesses
      */
-    public void guessed() {
+    public void playerGuessed() {
         repaint();
     }
 
@@ -74,15 +75,15 @@ public class BoardPanel extends JPanel implements Runnable {
         g2.setColor(COLOR_BACKGROUND);
         g2.fillRect(0, 0, boardWidth, boardHeight);
 
-        bgAnim(g2);
+        animateBackground(g2);
 
-        int x = CELLSIZE + CELLSPACE;
-        int y = CELLSIZE + CELLSPACE;
+        int x = CELL_SIZE + CELL_SPACE;
+        int y = CELL_SIZE + CELL_SPACE;
 
         for (int i = 0; i < game.getBoardSize(); i++) {
             if (i != 0 && i % game.getBoardWidth() == 0) {
-                x = CELLSIZE + CELLSPACE;
-                y += CELLSIZE + CELLSPACE;
+                x = CELL_SIZE + CELL_SPACE;
+                y += CELL_SIZE + CELL_SPACE;
             }
             Integer cellVal = game.getCell(i);
             Color c = COLOR_BACKGROUND;
@@ -94,10 +95,10 @@ public class BoardPanel extends JPanel implements Runnable {
                 c = COLOR_1;
             }
             g2.setColor(c);
-            g2.fillRect(x, y, CELLSIZE, CELLSIZE);
+            g2.fillRect(x, y, CELL_SIZE, CELL_SIZE);
             boardIndexToScreenCoordinateMap.put(i, new Point(x, y));
 
-            x += CELLSIZE + CELLSPACE;
+            x += CELL_SIZE + CELL_SPACE;
         }
     }
 
@@ -106,10 +107,10 @@ public class BoardPanel extends JPanel implements Runnable {
      *
      * @param g2 the graphics context
      */
-    private void bgAnim(Graphics2D g2) {
+    private void animateBackground(Graphics2D g2) {
 
         if(bgText == null) {
-            bgText = generateBgString();
+            bgText = generateBinaryBackgroundString();
         }
 
         g2.setColor(BG_TEXT_COLOR.darker().darker());
@@ -131,7 +132,7 @@ public class BoardPanel extends JPanel implements Runnable {
         animY++;
         if(animY > 25) {
             animY = 0;
-            bgText = generateBgString();
+            bgText = generateBinaryBackgroundString();
         }
     }
 
@@ -140,7 +141,7 @@ public class BoardPanel extends JPanel implements Runnable {
      *
      * @return a heavily spaced binary string
      */
-    private String generateBgString() {
+    private String generateBinaryBackgroundString() {
         StringBuffer sb = new StringBuffer();
         for(int lines = 0; lines < 100; lines++) {
             StringBuffer line = new StringBuffer("                                                                   " +
@@ -178,7 +179,7 @@ public class BoardPanel extends JPanel implements Runnable {
      * @return the width of the board
      */
     private int calculateWidth() {
-        return ((game.getBoardWidth() + 2) * (CELLSIZE + CELLSPACE)) - CELLSPACE;
+        return ((game.getBoardWidth() + 2) * (CELL_SIZE + CELL_SPACE)) - CELL_SPACE;
     }
 
     /**
@@ -187,6 +188,6 @@ public class BoardPanel extends JPanel implements Runnable {
      * @return the height of the board
      */
     private int calculateHeight() {
-        return ((game.getBoardHeight() + 2) * (CELLSIZE + CELLSPACE)) - CELLSPACE;
+        return ((game.getBoardHeight() + 2) * (CELL_SIZE + CELL_SPACE)) - CELL_SPACE;
     }
 }

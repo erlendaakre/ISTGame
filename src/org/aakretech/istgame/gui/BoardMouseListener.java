@@ -42,8 +42,8 @@ public class BoardMouseListener extends MouseAdapter {
             game.uncoverCell(indexClicked);
             final boolean humanIsNext = game.incrementPlayerIndex();
 
-            gameWindow.checkWin();
-            gameWindow.getControlPanel().updateText(game.getScore());
+            gameWindow.checkForWinner();
+            gameWindow.getControlPanel().updateScoreText(game.getScore());
             gameWindow.getControlPanel().setCurrentPlayerIndicator(game.getCurrentPlayer());
             gameWindow.getBoardPanel().repaint();
 
@@ -57,8 +57,8 @@ public class BoardMouseListener extends MouseAdapter {
                         } catch (InterruptedException e1) { }
 
                         game.aiMove();
-                        gameWindow.checkWin();
-                        gameWindow.getControlPanel().updateText(game.getScore());
+                        gameWindow.checkForWinner();
+                        gameWindow.getControlPanel().updateScoreText(game.getScore());
                         gameWindow.getControlPanel().setCurrentPlayerIndicator(game.getCurrentPlayer());
                         gameWindow.getBoardPanel().repaint();
 
@@ -76,8 +76,8 @@ public class BoardMouseListener extends MouseAdapter {
      */
     private int findIndexClicked(int x, int y) {
         for (Map.Entry<Integer, Point> entry : gameWindow.getBoardPanel().getBoardIndexToScreenCoordinateMap().entrySet()) {
-            if (x >= entry.getValue().getX() && x <= entry.getValue().getX() + BoardPanel.CELLSIZE
-                    && y >= entry.getValue().getY() && y <= entry.getValue().getY() + BoardPanel.CELLSIZE) {
+            if (x >= entry.getValue().getX() && x <= entry.getValue().getX() + BoardPanel.CELL_SIZE
+                    && y >= entry.getValue().getY() && y <= entry.getValue().getY() + BoardPanel.CELL_SIZE) {
                 return entry.getKey();
             }
         }

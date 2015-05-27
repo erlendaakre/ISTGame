@@ -23,7 +23,7 @@ public class GameFont {
     public GameFont() {
         try {
             baseFont = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream("resources/PetMe1282Y.ttf"));
-        } catch (FontFormatException | IOException e) {
+        } catch (Exception e) {
             System.err.println("ERROR LOADING FONT: " + e);
             baseFont = new Font("Dialog", Font.PLAIN, 12);
         }

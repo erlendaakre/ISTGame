@@ -42,6 +42,11 @@ public class Game {
         return newBoard;
     }
 
+    /**
+     * Guesses which colour is dominant
+     *
+     * @param guess the colour (0 = blue, 1 = yellow)
+     */
     public void guess(int guess) {
         int score = getScore();
 
@@ -106,6 +111,13 @@ public class Game {
         return (100D / total) * uncovered;
     }
 
+    /**
+     * Counts the number of uncovered tiles for a specific colour
+     *
+     * @param value the colour (0 = blue, 1 = yellow)   * @param value
+     *
+     * @return number of uncovered tiles of specified colour
+     */
     public int countUncovered(int value) {
         int res = 0;
         for (int i : board) {
