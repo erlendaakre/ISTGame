@@ -41,7 +41,7 @@ public class SimpleAI extends Player {
         int guess = -1;
         if (game.getPercentageUncovered() > 15 + prng.nextInt(30)) {
             guess = 1;
-            if (game.countUncovered(0) > game.countUncovered(1)) {
+            if (game.getUncoveredTileCount(0) > game.getUncoveredTileCount(1)) {
                 guess = 0;
             }
         }

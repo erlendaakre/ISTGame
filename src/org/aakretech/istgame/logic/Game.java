@@ -8,7 +8,7 @@ import org.aakretech.istgame.ai.SimpleAI;
 public class Game {
 
     private int goalScore;
-    private int favour;
+    private int tileColourFavour; // random number between minFavour and maxFavour used for determining tile colour distribution
     private int maxFavour;
     private int minFavour;
     private List<Integer> board;
@@ -28,22 +28,29 @@ public class Game {
 
         prng = new Random();
 
-        currentPlayerIndex = -1;
+        currentPlayerIndex = prng.nextInt(players.size());
 
-        resetGame();
+        startNewRound(true);
     }
 
-    private ArrayList<Integer> generateBoard() {
-
-        ArrayList<Integer> newBoard = new ArrayList<Integer>(this.boardHeight * this.boardWidth);
+    /**
+     * Generates a new empty board and randomly sets the tileColourFavour
+     *
+     * @return the newly generated board
+     */
+    private ArrayList<Integer> generateEmptyBoard() {
+        ArrayList<Integer> newBoard = new ArrayList<>(this.boardHeight * this.boardWidth);
         for (int i = 0; i < this.boardHeight * this.boardWidth; i++) {
             newBoard.add(-1);
         }
+
+        tileColourFavour = prng.nextInt(maxFavour - minFavour) + minFavour;
+
         return newBoard;
     }
 
     /**
-     * Guesses which colour is dominant
+     * Guesses which colour is dominant, calculates scores and starts the next round
      *
      * @param guess the colour (0 = blue, 1 = yellow)
      */
@@ -55,32 +62,32 @@ public class Game {
             uncoverCell(i);
         }
 
-        if (countUncovered(guess) > board.size() / 2) {
+        if (getUncoveredTileCount(guess) > board.size() / 2) {
             getCurrentPlayer().addScore(score);
+            startNewRound(true);
         } else {
             getCurrentPlayer().substractScore(score);
+            startNewRound(false);
         }
-
-        resetGame();
     }
 
-    public void resetGame() {
-        board = generateBoard();
-        favour = prng.nextInt(maxFavour - minFavour) + minFavour;
+    public void startNewRound(boolean playerGuessedCorrect) {
+        board = generateEmptyBoard();
 
-        if (currentPlayerIndex == -1) {
-            currentPlayerIndex = prng.nextInt(players.size());
-        } else {
-            /*if(!incrementPlayerIndex()) {
-             aiMove();
-             }  */
+        if(! playerGuessedCorrect) {
+            incrementPlayerIndex();
         }
 
+        // TODO: if AI's turn at new round, make it move
+        // TODO: seem to remember this code would break pvp games?? TEST
         /* if(! getCurrentPlayer().isHuman()) {
          aiMove();
          }  */
     }
 
+    /**
+     * Cause the AI player to make it's move
+     */
     public void aiMove() {
         SimpleAI ai = (SimpleAI) getCurrentPlayer();
         if (ai.getGame() == null) {
@@ -94,10 +101,6 @@ public class Game {
         } else {
             guess(guess);
         }
-    }
-
-    public Player getCurrentPlayer() {
-        return players.get(currentPlayerIndex);
     }
 
     public double getPercentageUncovered() {
@@ -114,11 +117,11 @@ public class Game {
     /**
      * Counts the number of uncovered tiles for a specific colour
      *
-     * @param value the colour (0 = blue, 1 = yellow)   * @param value
+     * @param value the colour (0 = blue, 1 = yellow)
      *
      * @return number of uncovered tiles of specified colour
      */
-    public int countUncovered(int value) {
+    public int getUncoveredTileCount(int value) {
         int res = 0;
         for (int i : board) {
             if (i == value) {
@@ -136,10 +139,6 @@ public class Game {
         return 100 - (int) getPercentageUncovered();
     }
 
-    public int getBoardSize() {
-        return board.size();
-    }
-
     public List<Integer> getBoard() {
         return board;
     }
@@ -151,23 +150,32 @@ public class Game {
     public void uncoverCell(int cellIndex) {
         if (board.get(cellIndex) == -1) {
             int cellValue = 0;
-            if (prng.nextInt(100) > favour) {
+            if (prng.nextInt(100) > tileColourFavour) {
                 cellValue = 1;
             }
             board.set(cellIndex, cellValue);
         }
     }
 
-    public boolean incrementPlayerIndex() {
+    public void incrementPlayerIndex() {
         currentPlayerIndex++;
         if (currentPlayerIndex >= players.size()) {
             currentPlayerIndex = 0;
         }
-        return getCurrentPlayer().isHuman();
     }
+
+    public Player getCurrentPlayer() {
+        return players.get(currentPlayerIndex);
+    }
+
+    public boolean isCurrentPlayerHuman() { return getCurrentPlayer().isHuman(); }
 
     public boolean isCellUncovered(int cellIndex) {
         return board.get(cellIndex) != -1;
+    }
+
+    public int getBoardSize() {
+        return board.size();
     }
 
     public int getBoardWidth() {

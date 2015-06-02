@@ -22,16 +22,16 @@ public class GeneticAI extends SimpleAI {
 
     public int guess() {
         int guess = -1;
-        double random = prng.nextDouble() * gene_random;
+        double random = prng.nextDouble() * gene_random;            // TODO: this gene is probably very STUPID
         if (game.getPercentageUncovered() >= gene_percentage_uncovered * gene_random) {
             guess = 1;
-            if (game.countUncovered(0) > gene_number_of_yellow * random) {
+            if (game.getUncoveredTileCount(0) > gene_number_of_yellow * random) {
                 guess = 0;
-            } else if (game.countUncovered(1) < gene_number_of_blue * gene_random) {
+            } else if (game.getUncoveredTileCount(1) < gene_number_of_blue * gene_random) {
                 guess = -1;
             }
 
-            if (game.countUncovered(0) + game.countUncovered(1) < gene_number_total * gene_random) {
+            if (game.getUncoveredTileCount(0) + game.getUncoveredTileCount(1) < gene_number_total * gene_random) {
                 guess = -1;
             }
         }

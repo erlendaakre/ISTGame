@@ -19,7 +19,7 @@ public class SplashPanel extends JPanel implements Runnable {
     public static final int MAX_GENERATIONS = 50;
 
     JButton pvpButton;
-    JButton pvcpuButton;
+    JButton cpuButton;
 
     private int color = 15000;
 
@@ -71,11 +71,11 @@ public class SplashPanel extends JPanel implements Runnable {
             }
         });
 
-        pvcpuButton = new JButton("CPU");
-        pvcpuButton.setFont(GAMEFONT.getWinFont());
-        pvcpuButton.setBounds(360, 50, 120, 80);
+        cpuButton = new JButton("CPU");
+        cpuButton.setFont(GAMEFONT.getWinFont());
+        cpuButton.setBounds(360, 50, 120, 80);
 
-        pvcpuButton.addActionListener(new ActionListener() {
+        cpuButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 evolveAi();
@@ -83,7 +83,7 @@ public class SplashPanel extends JPanel implements Runnable {
         });
 
         add(pvpButton);
-        add(pvcpuButton);
+        add(cpuButton);
     }
 
     private void evolveAi() {

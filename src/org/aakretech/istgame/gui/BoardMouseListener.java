@@ -40,7 +40,7 @@ public class BoardMouseListener extends MouseAdapter {
         int indexClicked = findIndexClicked(e.getX(), e.getY());
         if (indexClicked != -1 && !game.isCellUncovered(indexClicked)) {
             game.uncoverCell(indexClicked);
-            final boolean humanIsNext = game.incrementPlayerIndex();
+            game.incrementPlayerIndex();
 
             gameWindow.checkForWinner();
             gameWindow.getControlPanel().updateScoreText(game.getScore());
@@ -48,7 +48,7 @@ public class BoardMouseListener extends MouseAdapter {
             gameWindow.getBoardPanel().repaint();
 
 
-            if (!humanIsNext) {
+            if (!game.isCurrentPlayerHuman()) {
                 java.awt.EventQueue.invokeLater(new Runnable() {
                     @Override
                     public void run() {
@@ -56,7 +56,7 @@ public class BoardMouseListener extends MouseAdapter {
                             Thread.sleep(200 + (int) (Math.random() * 300));
                         } catch (InterruptedException e1) { }
 
-                        game.aiMove();
+                        game.aiMove();         // TODO: why the seven hells is this called from the mouse listener?????
                         gameWindow.checkForWinner();
                         gameWindow.getControlPanel().updateScoreText(game.getScore());
                         gameWindow.getControlPanel().setCurrentPlayerIndicator(game.getCurrentPlayer());

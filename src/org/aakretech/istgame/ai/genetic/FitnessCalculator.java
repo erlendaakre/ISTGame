@@ -11,6 +11,8 @@ public class FitnessCalculator {
 
     private static final int MAXMOVES = 5000;
 
+    // TODO: this fitness function is pretty shit
+
     public static void evaluateFitness(GeneticAI individual, int numberOfGames, int gameScore) {
 //        System.out.println("\t\tEvaluating fitness for individual with fitness: " + individual.getFitness());
         int fitness = 0;
@@ -27,7 +29,7 @@ public class FitnessCalculator {
                 game.aiMove();
                 move++;
             }
-            game.resetGame();
+            game.startNewRound(true);
 //            System.out.println("\t\t\tAdding score " + individual.getScore() + " to fitness: " + fitness);
             fitness += individual.getScore();
             individual.resetScore();
