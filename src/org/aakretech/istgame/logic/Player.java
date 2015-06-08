@@ -13,6 +13,7 @@ public class Player {
 
     /**
      * Creates a new named player
+     *
      * @param name the name of the player
      */
     public Player(String name) {
@@ -23,6 +24,7 @@ public class Player {
 
     /**
      * Gets the player name
+     *
      * @return the name
      */
     public String getName() {
@@ -31,6 +33,7 @@ public class Player {
 
     /**
      * gets the current score of the player
+     *
      * @return the score
      */
     public int getScore() {
@@ -39,17 +42,25 @@ public class Player {
 
     /**
      * Adds score to this player when guessing correctly
+     *
      * @param score score to add
      */
     public void addScore(int score) {
+        if (score < 1) {
+            throw new IllegalArgumentException("score to substract must be larger than 0");
+        }
         this.score += score;
     }
 
     /**
      * Removes score from this player if guessing incorrectly
+     *
      * @param score score to remove
      */
     public void substractScore(int score) {
+        if (score < 1) {
+            throw new IllegalArgumentException("score to substract must be larger than 0");
+        }
         this.score -= score;
     }
 
@@ -62,6 +73,7 @@ public class Player {
 
     /**
      * Checks if this player is human or computer
+     *
      * @return true if human player, false if AI
      */
     public boolean isHuman() {
