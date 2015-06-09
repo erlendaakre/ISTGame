@@ -1,4 +1,4 @@
-package test.org.aakretech.istgame.logic;
+package org.aakretech.istgame.logic;
 
 import org.aakretech.istgame.logic.Player;
 import org.junit.Assert;
