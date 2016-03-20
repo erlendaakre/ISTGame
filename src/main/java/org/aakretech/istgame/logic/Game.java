@@ -94,6 +94,8 @@ public class Game {
             ai.setGame(this);
         }
 
+        //todo: could an AI try to
+
         int guess = ai.guess();
         if (guess == -1) {
             uncoverCell(ai.flipTile());

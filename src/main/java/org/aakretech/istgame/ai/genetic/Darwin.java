@@ -36,7 +36,7 @@ public class Darwin {
     }
 
     public static void main(String[] main) {
-        Darwin darwin = new Darwin(100, 5, 500, 10, 50, 0.015D, 0.5D, 2);
+        Darwin darwin = new Darwin(100, 0, 500, 5, 50, 0.015D, 0.5D, 2);
 
         darwin.initPopulation();
         darwin.evaluate();
@@ -46,7 +46,7 @@ public class Darwin {
             System.out.println("Evolving generation: " + darwin.getCurrentGeneration());
             darwin.evolvePopulation();
             darwin.evaluate();
-//            darwin.printFitnessEvaltuation();
+            darwin.printFitnessEvaltuation();
         }
         darwin.printFitnessEvaltuation();
         darwin.printFittestIndividual();
@@ -73,6 +73,7 @@ public class Darwin {
                 e.printStackTrace();
             }
         }
+        printFitnessEvaltuation();
         return getFittestIndividual();
     }
 
@@ -111,7 +112,7 @@ public class Darwin {
     public List<GeneticAI> crossOver(GeneticAI parent1, GeneticAI parent2) {
         List<GeneticAI> offspring = new ArrayList<GeneticAI>(crossOverOffspring);
         for (int i = 0; i < crossOverOffspring; i++) {
-            GeneticAI child = new GeneticAI(0, 0, 0, 0, 0);
+            GeneticAI child = new GeneticAI(0, 0, 0, 0);
             offspring.add(child);
 
             if (prng.nextDouble() < uniformityRate) {
@@ -138,11 +139,6 @@ public class Darwin {
                 child.gene_number_total = parent2.gene_number_total;
             }
 
-            if (prng.nextDouble() < uniformityRate) {
-                child.gene_random = parent1.gene_random;
-            } else {
-                child.gene_random = parent2.gene_random;
-            }
         }
 
         return offspring;
@@ -162,9 +158,6 @@ public class Darwin {
         }
         if (prng.nextDouble() <= mutationRate) {
             individual.gene_number_total *= mutationFactor;
-        }
-        if (prng.nextDouble() <= mutationRate) {
-            individual.gene_random *= mutationFactor;
         }
     }
 
@@ -222,13 +215,12 @@ public class Darwin {
         System.out.println("NT GENE       : " + ai.gene_number_total);
         System.out.println("NB GENE       : " + ai.gene_number_of_blue);
         System.out.println("NY GENE       : " + ai.gene_number_of_yellow);
-        System.out.println("R  GENE       : " + ai.gene_random);
     }
 
     private void initPopulation() {
         System.out.println("Initializing Population : " + popSize);
         for (int i = 0; i < popSize; i++) {
-            GeneticAI individual = new GeneticAI(0, 0, 0, 0, 0);
+            GeneticAI individual = new GeneticAI(0, 0, 0, 0);
             individual.randomizeGenes();
             population.add(individual);
         }

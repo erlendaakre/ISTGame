@@ -9,7 +9,8 @@ import org.aakretech.istgame.logic.Player;
 
 public class FitnessCalculator {
 
-    private static final int MAXMOVES = 5000;
+    private static final int MAXMOVES = 500;
+    private static final int MINIMUM_SCORE = -1000;
 
     // TODO: this fitness function is pretty shit
 
@@ -24,7 +25,8 @@ public class FitnessCalculator {
             Game game = new Game(5, 5, players, gameScore, 20, 80);
             individual.setGame(game);
             int move = 1;
-            while (game.getPercentageUncovered() < 100 && individual.getScore() < gameScore && move < MAXMOVES) {
+            while (game.getPercentageUncovered() < 100 && individual.getScore() < gameScore && move < MAXMOVES
+                    && individual.getScore() >= MINIMUM_SCORE) {
 //                System.out.print("Move " + move + "   % " + game.getPercentageUncovered() + "     :");
                 game.aiMove();
                 move++;
